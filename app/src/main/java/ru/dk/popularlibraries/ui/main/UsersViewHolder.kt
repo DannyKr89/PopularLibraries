@@ -1,11 +1,13 @@
-package ru.dk.popularlibraries
+package ru.dk.popularlibraries.ui.main
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.RoundedCornersTransformation
+import ru.dk.popularlibraries.R
 import ru.dk.popularlibraries.databinding.ItemUsersBinding
+import ru.dk.popularlibraries.domain.UserEntity
 
 class UsersViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
     LayoutInflater.from(parent.context).inflate(R.layout.item_users, parent, false)

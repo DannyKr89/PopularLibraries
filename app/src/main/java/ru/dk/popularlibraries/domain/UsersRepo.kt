@@ -1,4 +1,4 @@
-package ru.dk.popularlibraries
+package ru.dk.popularlibraries.domain
 
 interface UsersRepo {
     fun getUsers(

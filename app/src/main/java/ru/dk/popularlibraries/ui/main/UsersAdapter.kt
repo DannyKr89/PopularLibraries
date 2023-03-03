@@ -1,8 +1,9 @@
-package ru.dk.popularlibraries
+package ru.dk.popularlibraries.ui.main
 
 import android.annotation.SuppressLint
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import ru.dk.popularlibraries.domain.UserEntity
 
 class UsersAdapter() : RecyclerView.Adapter<UsersViewHolder>() {
     private val data = mutableListOf<UserEntity>()

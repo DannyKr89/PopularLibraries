@@ -9,20 +9,20 @@
 
 
     <ImageView
-        android:layout_gravity="start"
         android:id="@+id/iv_user_avatar"
         android:layout_width="72dp"
         android:layout_height="72dp"
+        android:layout_gravity="start"
         tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/tv_user_login"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:padding="@dimen/small_padding_8"
         android:layout_gravity="center"
-        android:textSize="28sp"
         android:layout_weight="1"
+        android:padding="@dimen/small_padding_8"
+        android:textSize="28sp"
         android:textStyle="bold" />
 
     <TextView

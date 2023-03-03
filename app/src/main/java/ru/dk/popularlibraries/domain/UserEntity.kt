@@ -1,4 +1,4 @@
-package ru.dk.popularlibraries
+package ru.dk.popularlibraries.domain
 
 data class UserEntity(
     val login: String,

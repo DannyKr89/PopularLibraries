@@ -1,7 +1,9 @@
-package ru.dk.popularlibraries
+package ru.dk.popularlibraries.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import ru.dk.popularlibraries.R
+import ru.dk.popularlibraries.ui.main.MainFragment
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
