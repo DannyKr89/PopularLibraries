@@ -1,4 +1,4 @@
-package ru.dk.popularlibraries.ui.main
+package ru.dk.popularlibraries.ui.users
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,16 +8,17 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import ru.dk.popularlibraries.R
 import ru.dk.popularlibraries.app
 import ru.dk.popularlibraries.databinding.FragmentMainBinding
 import ru.dk.popularlibraries.domain.UserEntity
+import ru.dk.popularlibraries.ui.profile.ProfileFragment
 
 class MainFragment : Fragment(), UsersContract.View {
 
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
     private val adapter = UsersAdapter()
-    private lateinit var presenter: UsersContract.Presenter
 
     companion object {
         fun newInstance() = MainFragment()
@@ -35,8 +36,7 @@ class MainFragment : Fragment(), UsersContract.View {
 
         initViews()
 
-        presenter = UsersPresenter(app.usersRepo)
-        presenter.attach(this)
+        app.presenter.attach(this)
     }
 
 
@@ -45,7 +45,7 @@ class MainFragment : Fragment(), UsersContract.View {
             rvUsersList.layoutManager = LinearLayoutManager(app)
             rvUsersList.adapter = adapter
             btnRefresh.setOnClickListener {
-                presenter.onRefresh()
+                app.presenter.onRefresh()
             }
         }
     }
@@ -53,11 +53,20 @@ class MainFragment : Fragment(), UsersContract.View {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
-        presenter.detach()
+        app.presenter.detach()
     }
 
     override fun showUsers(users: List<UserEntity>) {
         adapter.setData(users)
+        adapter.listener = {
+            requireActivity().supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.fragment_container, ProfileFragment.newInstance(Bundle().apply {
+                    putParcelable("USER", it)
+                }))
+                .addToBackStack("")
+                .commit()
+        }
     }
 
     override fun showError(throwable: Throwable) {
@@ -68,7 +77,8 @@ class MainFragment : Fragment(), UsersContract.View {
         with(binding) {
             rvUsersList.isVisible = !inProgress
             progress.isVisible = inProgress
-            btnRefresh.isEnabled= !inProgress
+            btnRefresh.isEnabled = !inProgress
         }
     }
+
 }

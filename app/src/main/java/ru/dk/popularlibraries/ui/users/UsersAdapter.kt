@@ -1,4 +1,4 @@
-package ru.dk.popularlibraries.ui.main
+package ru.dk.popularlibraries.ui.users
 
 import android.annotation.SuppressLint
 import android.view.ViewGroup
@@ -7,6 +7,7 @@ import ru.dk.popularlibraries.domain.UserEntity
 
 class UsersAdapter() : RecyclerView.Adapter<UsersViewHolder>() {
     private val data = mutableListOf<UserEntity>()
+    var listener: ((UserEntity) -> Unit)? = null
 
     init {
         setHasStableIds(true)
@@ -21,7 +22,7 @@ class UsersAdapter() : RecyclerView.Adapter<UsersViewHolder>() {
     override fun getItemCount() = data.size
 
     override fun onBindViewHolder(holder: UsersViewHolder, position: Int) {
-        holder.bind(data[position])
+        holder.bind(data[position], listener)
     }
 
     @SuppressLint("NotifyDataSetChanged")

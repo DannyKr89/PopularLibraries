@@ -1,4 +1,4 @@
-package ru.dk.popularlibraries.ui.main
+package ru.dk.popularlibraries.ui.users
 
 import ru.dk.popularlibraries.domain.UserEntity
 

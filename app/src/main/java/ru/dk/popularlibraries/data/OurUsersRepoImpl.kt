@@ -26,9 +26,10 @@ class OurUsersRepoImpl : UsersRepo {
     override fun getUsers(onSuccess: (List<UserEntity>) -> Unit, onError: ((Throwable) -> Unit)?) {
         Handler(Looper.getMainLooper()).postDelayed(2000) {
             if ((0..3).random() == 1) {
-                onError?.let { it(Throwable("Ошибочка")) }
+                onError?.invoke(Throwable("Ошибочка"))
+            } else {
+                onSuccess(data)
             }
-            onSuccess(data)
         }
     }
 }
