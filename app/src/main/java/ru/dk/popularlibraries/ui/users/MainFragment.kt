@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import ru.dk.popularlibraries.R
 import ru.dk.popularlibraries.app
@@ -14,11 +15,14 @@ import ru.dk.popularlibraries.databinding.FragmentMainBinding
 import ru.dk.popularlibraries.domain.UserEntity
 import ru.dk.popularlibraries.ui.profile.ProfileFragment
 
-class MainFragment : Fragment(), UsersContract.View {
+class MainFragment : Fragment() {
 
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
     private val adapter = UsersAdapter()
+    private val viewModel: UsersViewModel by lazy {
+        ViewModelProvider(this, UsersViewModelFactory(app.usersRepo))[UsersViewModel::class.java]
+    }
 
     companion object {
         fun newInstance() = MainFragment()
@@ -35,8 +39,20 @@ class MainFragment : Fragment(), UsersContract.View {
         super.onViewCreated(view, savedInstanceState)
 
         initViews()
+        initViewModel()
+    }
 
-        app.presenter.attach(this)
+    private fun initViewModel() {
+        viewModel.getUsersLivedata().observe(viewLifecycleOwner) {
+            showUsers(it)
+        }
+
+        viewModel.getErrorLivedata().observe(viewLifecycleOwner) {
+            showError(it)
+        }
+        viewModel.getProgressLivedata().observe(viewLifecycleOwner) {
+            showProgressbar(it)
+        }
     }
 
 
@@ -45,7 +61,7 @@ class MainFragment : Fragment(), UsersContract.View {
             rvUsersList.layoutManager = LinearLayoutManager(app)
             rvUsersList.adapter = adapter
             btnRefresh.setOnClickListener {
-                app.presenter.onRefresh()
+                viewModel.loadData()
             }
         }
     }
@@ -53,10 +69,9 @@ class MainFragment : Fragment(), UsersContract.View {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
-        app.presenter.detach()
     }
 
-    override fun showUsers(users: List<UserEntity>) {
+    private fun showUsers(users: List<UserEntity>) {
         adapter.setData(users)
         adapter.listener = {
             requireActivity().supportFragmentManager
@@ -69,11 +84,11 @@ class MainFragment : Fragment(), UsersContract.View {
         }
     }
 
-    override fun showError(throwable: Throwable) {
+    private fun showError(throwable: Throwable) {
         Toast.makeText(app, throwable.message, Toast.LENGTH_SHORT).show()
     }
 
-    override fun showProgressbar(inProgress: Boolean) {
+    private fun showProgressbar(inProgress: Boolean) {
         with(binding) {
             rvUsersList.isVisible = !inProgress
             progress.isVisible = inProgress
